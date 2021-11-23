@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CODE_Bagageband.ViewModel
 {
-    public class BagagebandViewModel : ViewModelBase
+    public class BagagebandViewModel : ViewModelBase , IObserver<Bagageband>
     {
         private string _vluchtVertrokkenVanuit;
         public string VluchtVertrokkenVanuit
@@ -33,7 +33,8 @@ namespace CODE_Bagageband.ViewModel
 
         public BagagebandViewModel(Bagageband band)
         {
-            Update(band);
+            band.Subscribe(this);
+            OnNext(band);
         }
 
         public void Update(Bagageband value)
@@ -41,6 +42,34 @@ namespace CODE_Bagageband.ViewModel
             VluchtVertrokkenVanuit = value.VluchtVertrokkenVanuit;
             AantalKoffers = value.AantalKoffers;
             Naam = value.Naam;
+        }
+
+        /// <summary>
+        /// Als er een update is wordt deze aangeroepen, je krijgt hier heel het object
+        /// binnen. Dus elke keer als er een waarde binnen het object dat wij in de gaten houden
+        /// verandert zal deze methode aangeroepen worden.We kunnen dan onze view aansturen dat
+        /// de nieuwe waarde op het scherm moet komen.
+        /// </summary>
+        /// <param name="value"></param>
+        public void OnNext(Bagageband value)
+        {
+            Update(value);
+        }
+
+        /// <summary>
+        /// Deze gaan we niet gebruiken
+        /// </summary>
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Deze gaan we niet gebruiken
+        /// </summary>
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
         }
     }
 }

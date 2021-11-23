@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace CODE_Bagageband.Model
 {
-    public class Bagageband
+    public class Bagageband : Observable<Bagageband>
     {
         public string Naam { get; set; }
         private int _aantalKoffersPerMinuut;
@@ -38,7 +38,7 @@ namespace CODE_Bagageband.Model
 
             _huidigeVluchtTimer.Start();
 
-            // TODO: We moeten het laten weten dat we een update hebben!
+            Notify(this);
         }
 
         private void KofferVanBandGehaald(object sender, EventArgs e)
@@ -51,7 +51,7 @@ namespace CODE_Bagageband.Model
                 _huidigeVluchtTimer.Stop();
             }
 
-            // TODO: We moeten het laten weten dat we een update hebben!
+            Notify(this);
         }
     }
 }

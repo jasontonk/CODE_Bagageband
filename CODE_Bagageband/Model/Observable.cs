@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CODE_Bagageband.Model
 {
     public abstract class Observable<T> : IObservable<T>, IDisposable
     {
+        // Aan hen moeten we een seintje geven als we veranderd zijn.
         private List<IObserver<T>> _observers;
 
         public Observable()
@@ -27,12 +25,7 @@ namespace CODE_Bagageband.Model
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
-            // TODO: We moeten bijhouden wie ons in de gaten houdt.
-            // TODO: Stop de observer dus in de lijst met observers. We weten dan
-            // welke objecten we allemaal een seintje moeten geven.
-            // Daarna geven we een object terug.
-            // Als dat object gedisposed wordt geven wij
-            // de bovenstaande observer geen seintjes meer.
+            _observers.Add(observer);
             return new Unsubscriber(() => _observers.Remove(observer));
         }
 
@@ -44,14 +37,16 @@ namespace CODE_Bagageband.Model
         protected void Notify(T subject)
         {
             // TODO: Hier moeten we iedere observer die ons in de gaten houdt een seintje geven dat we een nieuwe waarde hebben.We roepen dus hun OnNext methode aan.
-                throw new NotImplementedException();
+            foreach(var observer in _observers)
+            {
+                observer.OnNext(subject);
+            }
         }
 
         public void Dispose()
         {
+            // Deze implementeren we later
             throw new NotImplementedException();
         }
-
-
     }
 }
